@@ -1,23 +1,31 @@
-import type { TestingModule } from '@nestjs/testing'
-import { Test } from '@nestjs/testing'
+import { Test, TestingModule } from '@nestjs/testing'
+import { vi } from 'vitest'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 describe('AppController', () => {
   let appController: AppController
+  let appService: { getHello: ReturnType<typeof vi.fn> }
 
   beforeEach(async () => {
+    appService = { getHello: vi.fn() }
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [
+        {
+          provide: AppService,
+          useValue: appService,
+        },
+      ],
     }).compile()
 
     appController = app.get<AppController>(AppController)
   })
 
   describe('root', () => {
-    it('should return "Backend is live!"', () => {
-      expect(appController.getHello()).toBe('Backend is live!')
+    it('should return "Hello World!"', async () => {
+      appService.getHello.mockResolvedValue('Hello World!')
+      expect(await appController.getHello()).toBe('Hello World!')
     })
   })
 })

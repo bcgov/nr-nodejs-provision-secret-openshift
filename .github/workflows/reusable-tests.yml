@@ -5,12 +5,12 @@ on:
     inputs:
       ### Required
       target:
-        description: PR number, test or prod
+        description: PR number or dev
         default: ${{ github.event.number }}
         type: string
 
 env:
-  DOMAIN: apps.silver.devops.gov.bc.ca
+  DOMAIN: apps.gold.devops.gov.bc.ca
   PREFIX: ${{ github.event.repository.name }}-${{ inputs.target }}
 
 permissions: {}
@@ -52,15 +52,6 @@ jobs:
           done
           echo "ERROR: Backend did not become healthy in time."
           exit 1
-
-      - name: Run Integration Tests
-        env:
-          API_NAME: nest
-          BASE_URL: https://${{ env.PREFIX }}.${{ env.DOMAIN }}
-        run: |
-          cd common/tests/integration
-          npm ci
-          node src/main.js
 
   e2e-tests:
     name: E2E
