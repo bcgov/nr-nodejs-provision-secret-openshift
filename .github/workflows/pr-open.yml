@@ -30,16 +30,16 @@ jobs:
           tag_fallback: latest
           triggers: ('${{ matrix.package }}/', '.github/workflows/pr-open.yml')
 
-  deploys:
-    name: Deploys (${{ github.event.number }})
-    needs: [builds]
-    uses: ./.github/workflows/reusable-deploy.yml
-    secrets:
-      oc_namespace: ${{ secrets.oc_namespace }}
-      oc_token: ${{ secrets.oc_token }}
-    with:
-      target: ${{ github.event.number }}
-      triggers: ('backend/', 'frontend/', '.github/workflows/pr-open.yml')
+  #deploys:
+  #  name: Deploys (${{ github.event.number }})
+  #  needs: [builds]
+  #  uses: ./.github/workflows/reusable-deploy.yml
+  #  secrets:
+  #    oc_namespace: ${{ secrets.oc_namespace }}
+  #    oc_token: ${{ secrets.oc_token }}
+  #  with:
+  #    target: ${{ github.event.number }}
+  #    triggers: ('backend/', 'frontend/', '.github/workflows/pr-open.yml')
 
   #tests:
   #   name: Tests
@@ -54,7 +54,7 @@ jobs:
   # ==========================================================================
   results:
     name: PR Results
-    needs: [builds, deploys]
+    needs: [builds]
     if: always()
     runs-on: ubuntu-slim
     timeout-minutes: 1
