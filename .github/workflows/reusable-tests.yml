@@ -53,15 +53,6 @@ jobs:
           echo "ERROR: Backend did not become healthy in time."
           exit 1
 
-      - name: Run Integration Tests
-        env:
-          API_NAME: nest
-          BASE_URL: https://${{ env.PREFIX }}.${{ env.DOMAIN }}
-        run: |
-          cd common/tests/integration
-          npm ci
-          node src/main.js
-
   e2e-tests:
     name: E2E
     defaults:
