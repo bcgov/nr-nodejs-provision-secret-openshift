@@ -23,10 +23,10 @@ parameters:
     value: apps.gold.devops.gov.bc.ca
   - name: MIN_REPLICAS
     description: The minimum amount of replicas for the horizontal pod autoscaler.
-    value: "2"
+    value: "1"
   - name: MAX_REPLICAS
     description: The maximum amount of replicas for the horizontal pod autoscaler.
-    value: "5"
+    value: "1"
   - name: CPU_REQUEST
     value: "50m"
   - name: MEMORY_REQUEST
