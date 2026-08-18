@@ -15,5 +15,13 @@ describe('AppController (e2e)', () => {
     await app.init()
   })
 
-  it('/ (GET)', () => request(app.getHttpServer()).get('/').expect(200).expect('Backend is live!'))
+  it('/ (GET)', () =>
+    request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect((response) => {
+        if (!response.text.includes('oscar-example')) {
+          throw new Error(`Expected response to contain oscar-example, got ${response.text}`)
+        }
+      }))
 })

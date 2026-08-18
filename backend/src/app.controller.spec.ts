@@ -1,26 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { createMock, DeepMocked } from '@golevelup/ts-jest'
+import { vi } from 'vitest'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 describe('AppController', () => {
   let appController: AppController
-  let appService: DeepMocked<AppService>
+  let appService: { getHello: ReturnType<typeof vi.fn> }
 
   beforeEach(async () => {
+    appService = { getHello: vi.fn() }
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
       providers: [
-        AppService,
         {
           provide: AppService,
-          useValue: createMock<AppService>(),
+          useValue: appService,
         },
       ],
     }).compile()
 
     appController = app.get<AppController>(AppController)
-    appService = app.get<AppService>(AppService) as DeepMocked<AppService>
   })
 
   describe('root', () => {
