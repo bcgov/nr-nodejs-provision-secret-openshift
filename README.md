@@ -91,7 +91,7 @@ Environments provide a [number of features](https://docs.github.com/en/actions/d
 
 * Required reviewers
 * Wait timer
-* Limit TEST/PROD values to post-merge workflows
+* Limit DEV values to post-merge workflows
 
 ### Example
 
@@ -103,12 +103,9 @@ Here is the arrangement of secrets, variables and environments for this reposito
 | none        | `secrets.oc_namespace` | PR namespace (repository-level)                 |
 | none        | `secrets.oc_token`     | PR service token (repository-level)             |
 | none        | `secrets.db_password`  | PR database password (repository-level)         |
-| test        | `secrets.oc_namespace` | TEST namespace (environment-level)              |
-| test        | `secrets.oc_token`     | TEST service token (environment-level)          |
-| test        | `secrets.db_password`  | TEST database password (environment-level)       |
-| prod        | `secrets.oc_namespace` | PROD namespace (environment-level)              |
-| prod        | `secrets.oc_token`     | PROD service token (environment-level)          |
-| prod        | `secrets.db_password`  | PROD database password (environment-level)       |
+| dev         | `secrets.oc_namespace` | DEV namespace (environment-level)               |
+| dev         | `secrets.oc_token`     | DEV service token (environment-level)           |
+| dev         | `secrets.db_password`  | DEV database password (environment-level)       |
 
 ### Secret Values
 
@@ -151,7 +148,7 @@ Create separate tokens for each of the DEV, TEST and PROD namespaces.
 
 **`oc_namespace`** 
 
-Teams will receive a set of project namespaces, usually DEV (for PRs), TEST and PROD.  TOOLS namespaces (e.g. Jenkins, shared Oracle resources) are not used here.  Provided by your OpenShift platform team.
+Teams will receive a DEV project namespace for this application. TOOLS namespaces (e.g. Jenkins, shared Oracle resources) are not used here. Provided by your OpenShift platform team.
 
 * Reference: `${{ secrets.oc_namespace }}`
 * E.g.: `abc123-dev`
@@ -167,18 +164,11 @@ BC Government employees can request SonarCloud projects by creating an [issue](h
 
 **db_password**
 
-The password used for the PostgreSQL database. This **MUST** be a strong, unique password and **DISTINCT** across all environments (pr, test, prod). Reusing the same password in development/PRs as in production is a critical security risk.
+The password used for the PostgreSQL database. This **MUST** be a strong, unique password and **DISTINCT** across the PR and DEV environments.
 
 * Reference: `${{ secrets.db_password }}`
-* Minimum 12 characters recommended for production.
+* Minimum 12 characters recommended.
 * **Pro-tip**: Use a password manager (like BitWarden, 1Password, or KeePass) to generate and store long, random, and unique passwords for each environment. Avoid simple, guessable passwords like `password` or `secure`.
-
-**`SYSDIG_API_TOKEN`**
-
-Sysdig API token used to sync the PROD email-alert set on every merge. Sourced from the in-cluster Secret materialized by your `SysdigTeam` CR (BC Gov platform-services provisions this in your `*-tools` namespace). Optional — if unset, the `monitor-prod` step no-ops with a warning, so the deploy still succeeds.
-
-* Reference: `${{ secrets.SYSDIG_API_TOKEN }}`
-* Alert templates live in [`monitoring/alerts/`](./monitoring/alerts/). Add or remove files to customize the alert set per app — see [`bcgov/action-sysdig-monitor`](https://github.com/bcgov/action-sysdig-monitor) for the template schema and placeholder vocabulary.
 
 ### Variable Values
 

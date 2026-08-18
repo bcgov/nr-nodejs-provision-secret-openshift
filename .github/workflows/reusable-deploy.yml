@@ -9,7 +9,7 @@ on:
         default: ""
         type: string
       target:
-        description: Deployment target; usually PR number, test or prod
+        description: Deployment target; usually PR number or dev
         default: ${{ github.event.number }}
         type: string
       tag:
