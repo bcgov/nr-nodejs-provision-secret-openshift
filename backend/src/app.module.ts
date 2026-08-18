@@ -1,30 +1,18 @@
-import 'dotenv/config'
-import type { MiddlewareConsumer } from '@nestjs/common'
-import { Module, RequestMethod } from '@nestjs/common'
-import { HTTPLoggerMiddleware } from './middleware/req.res.logger'
-import { PrismaService } from './prisma.service'
-import { ConfigModule } from '@nestjs/config'
-import { UsersModule } from './users/users.module'
-import { AppService } from './app.service'
+import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
-import { MetricsController } from './metrics.controller'
-import { TerminusModule } from '@nestjs/terminus'
+import { AppService } from './app.service'
+import { ConfigModule } from '@nestjs/config'
+import configuration from './config/configuration'
 import { HealthController } from './health.controller'
 
 @Module({
-  imports: [ConfigModule.forRoot(), TerminusModule, UsersModule],
-  controllers: [AppController, MetricsController, HealthController],
-  providers: [AppService, PrismaService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration], // loads your configuration.ts
+    }),
+  ],
+  controllers: [AppController, HealthController],
+  providers: [AppService],
 })
-export class AppModule {
-  // let's add a middleware on all routes
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(HTTPLoggerMiddleware)
-      .exclude(
-        { path: 'metrics', method: RequestMethod.ALL },
-        { path: 'health', method: RequestMethod.ALL },
-      )
-      .forRoutes('*')
-  }
-}
+export class AppModule {}

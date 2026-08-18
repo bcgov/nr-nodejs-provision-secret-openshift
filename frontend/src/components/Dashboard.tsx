@@ -32,27 +32,19 @@ const ModalComponent: FC<ModalProps> = ({ show, onHide, user }) => {
 }
 
 const Dashboard: FC = () => {
-  const [data, setData] = useState<any>([])
+  const [data, setData] = useState<string>('')
   const [selectedUser, setSelectedUser] = useState<UserDto | undefined>(undefined)
 
   useEffect(() => {
     apiService
       .getAxiosInstance()
-      .get('/v1/users')
+      .get('/')
       .then((response: AxiosResponse) => {
-        const users: UserDto[] = []
-        for (const user of response.data) {
-          const userDto = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-          }
-          users.push(userDto)
-        }
-        setData(users)
+        console.info('Backend root response:', response.data)
+        setData(response.data)
       })
-      .catch((error) => {
-        console.error(error)
+      .catch((error: unknown) => {
+        console.error('Failed to fetch backend data:', error)
       })
   }, [])
 
@@ -62,31 +54,12 @@ const Dashboard: FC = () => {
 
   return (
     <div className="min-vh-45 mh-45 mw-50 ml-4">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Employee ID</th>
-            <th>Employee Name</th>
-            <th>Employee Email</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((user: UserDto) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td className="text-center">
-                <Button variant="secondary" size="sm" onClick={() => setSelectedUser(user)}>
-                  View Details
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <ModalComponent show={!!selectedUser} onHide={handleClose} user={selectedUser} />
+      <div className="card">
+        <div className="card-header">API Response</div>
+        <div className="card-body">
+          <pre>{data}</pre>
+        </div>
+      </div>
     </div>
   )
 }

@@ -20,7 +20,7 @@ parameters:
     description: Organization name
     value: bcgov
   - name: DOMAIN
-    value: apps.silver.devops.gov.bc.ca
+    value: apps.gold.devops.gov.bc.ca
   - name: MIN_REPLICAS
     description: The minimum amount of replicas for the horizontal pod autoscaler.
     value: "2"
@@ -150,6 +150,21 @@ objects:
               env:
                 - name: LOG_LEVEL
                   value: ${LOG_LEVEL}
+                - name: APITOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-nodejs-sample-secret
+                      key: API_TOKEN
+                - name: USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-nodejs-sample-secret
+                      key: my_test_user
+                - name: PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-nodejs-sample-secret
+                      key: my_test_password
                 - name: POSTGRES_HOST
                   value: ${NAME}-${ZONE}-database
                 - name: POSTGRES_PORT
