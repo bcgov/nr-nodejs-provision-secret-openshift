@@ -27,10 +27,10 @@ parameters:
     value: app-nodejs-sample-secret
   - name: MIN_REPLICAS
     description: The minimum amount of replicas for the horizontal pod autoscaler.
-    value: "2"
+    value: "1"
   - name: MAX_REPLICAS
     description: The maximum amount of replicas for the horizontal pod autoscaler.
-    value: "5"
+    value: "1"
   - name: CPU_REQUEST
     value: "100m"
   - name: MEMORY_REQUEST
