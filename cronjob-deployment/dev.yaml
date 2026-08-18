@@ -68,7 +68,7 @@ networkPolicy:
 # Enables a Job that syncs Vault secrets to OpenShift secrets after the CronJob runs
 sync:
   # Enable or disable the sync job
-  enabled: true
+  enabled: false
 
   # Schedule for the sync job (cron expression)
   # Set to empty string to run as a one-time Job (not CronJob)
